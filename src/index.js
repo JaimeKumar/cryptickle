@@ -5,8 +5,7 @@ import $ from 'jquery';
 
 
 function resize() {
-  console.log(window, window.screen);
-  $('.bodyCont').css('height', window.innerHeight + 'px');
+  $('.bodyCont').css('height', window.screen.availHeight + 'px');
 }
 
 window.addEventListener('resize', resize);
