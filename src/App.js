@@ -410,7 +410,7 @@ function App() {
   
   return (
     <div className="bodyCont">
-      
+      <div className="rectangle"></div>
       <div className="menuButton" onClick={openMenu}>
           ☰
         </div>
