@@ -31,12 +31,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   text-align: center;
   align-items: center;
   overflow: hidden;
   transition: 0.3s ease;
-  padding: 0px 10px 10px 10px;
+  padding: 10px 10px 10px 10px;
 }
 
 .mainShift {
@@ -407,4 +407,5 @@ i {
 
 .page img {
   width: 50%;
+  max-width: 160px;
 }
