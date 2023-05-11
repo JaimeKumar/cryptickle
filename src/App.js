@@ -489,7 +489,7 @@ function App() {
                     Bare in mind, the letter you want an across clue for must be selected to have these options.
                   </li>
                 </ul>
-                  <img src={helpIMG1} />
+                  <img src={helpIMG1} alt='help information diagram'/>
               <div className="helpButton" style={{height: '25px'}} >
                 <div className="close" style={{fontSize: '1.4em'}} onClick={moreHelp}>
                   ➔
