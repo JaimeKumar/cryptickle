@@ -17,7 +17,7 @@
 
 .bodyCont {
   overflow: hidden;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .mainContainer {
@@ -336,9 +336,7 @@ h3 {
   aspect-ratio: 3/5;
   background-color: var(--bkg);
   z-index: 10;
-  border-radius: 15px;
-  /* display: flex; */
-  /* flex-direction: row; */
+  /* border-radius: 15px; */
   overflow: hidden;
 }
 
