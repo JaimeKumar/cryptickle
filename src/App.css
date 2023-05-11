@@ -27,6 +27,7 @@
   left: 150px;
   width: 30px;
   height: 669px;
+  z-index: 100;
 }
 
 .mainContainer {
