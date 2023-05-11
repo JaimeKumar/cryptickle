@@ -33,7 +33,8 @@ function App() {
   const modes = ['Dark Mode', 'Light Mode'];
 
   useEffect(() => {
-    getMain()
+    getMain();
+    resize();
   }, [])
 
   useEffect(() => {
@@ -56,6 +57,14 @@ function App() {
     }
 
   }, [darkMode])
+
+  function resize() {
+    console.log(window.innerHeight, window.screen.availHeight);
+    $('.bodyCont').css('height', window.innerHeight + 'px');
+    $('.mainContainer').css('height', window.innerHeight + 'px');
+  }
+  
+  window.addEventListener('resize', resize);
   
   function getMain() {
     let tempClue = cluesArr[Math.floor(Math.random() * cluesArr.length)];
