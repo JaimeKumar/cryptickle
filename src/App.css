@@ -330,7 +330,7 @@ h3 {
   align-items: center;
   height: 100%;
   height: -webkit-fill-available;
-  position: relative;
+  position: absolute;
 }
 
 .helpContainer {
