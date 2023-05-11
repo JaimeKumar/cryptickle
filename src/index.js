@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 
 function resize() {
-  console.log(JSON.stringify(window), window.innerHeight, window.screen.availHeight);
+  console.log(window.innerHeight, window.screen.availHeight);
   $('.bodyCont').css('height', window.innerHeight + 'px');
 }
 
