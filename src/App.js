@@ -9,12 +9,12 @@ import Sidebox from './Sidebox'
 import Letterbox from './Letterbox'
 import Scoresheet from './Scoresheet';
 
-import modeButtonLight from './modeLight.svg';
-import modeButtonDark from './modeDark.svg';
 import checkButtonLight from './checkLight.svg';
 import checkButtonDark from './checkDark.svg';
 import revealButtonLight from './revealLight.svg';
 import revealButtonDark from './revealDark.svg';
+import hintLight from './hintLight.svg';
+import hintDark from './hintDark.svg';
 import helpIMG1 from './helpIMG1.png';
 
 // https://cryptics.georgeho.org/data/clues?_next=2000 //
@@ -26,7 +26,13 @@ function App() {
   const [letterboxes, setLBs] = useState([]);
   const [sideboxes, setSBs] = useState([]);
   const [cluesState, setClues] = useState({down: {clue: ''}, across: {clue: ''}});
-  const [helpers, setHelp] = useState({checks: 0, reveals: 0, sideReveals: 0, opened: 0});
+  const [helpers, setHelp] = useState({
+    checks: {title: 'Check', val: 0, mul: 3}, 
+    reveals: {title: 'Reveals', val: 0, mul: 100, div: true}, 
+    sideReveals: {title: 'Across Reveals', val: 0, mul: 10, div: true}, 
+    opened: {title: 'Across clues', val: 0, val: 0, mul: 10, div: true}, 
+    hintUsed: {title: 'Hint Used', val: 0, mul: 10, div: false}
+  });
   const [selected, setSelected] = useState();
   const [score, setScore] = useState(100);
   const [darkMode, setMode] = useState(false);
@@ -46,22 +52,19 @@ function App() {
     let r = $(':root');
     if (darkMode) {
       r.css('--bkg', '#000612');
-      r.css('--bkg2', '#75c0d20c');
+      r.css('--bkg2', '#75c0d21f');
       r.css('--fg', '#aaeeff');
       r.css('--fg2', '#618791');
     } else {
       r.css('--bkg', '#fff');
-      r.css('--bkg2', '#005fef0a');
+      r.css('--bkg2', '#005fef14');
       r.css('--fg', '#000');
       r.css('--fg2', '#c0c0c0');
     }
-
   }, [darkMode])
 
   function resize() {
-    console.log(window.innerHeight, window.screen.availHeight);
     $('.bodyCont').css('height', window.innerHeight + 'px');
-    // $('.mainContainer').css('height', window.innerHeight + 'px');
   }
   
   window.addEventListener('resize', resize);
@@ -115,7 +118,8 @@ function App() {
       char: letter.char,
       confirmed: (letter === '-'),
       sideclue: letter.clue,
-      space: letter.space
+      space: letter.space,
+      def: tempClue.definition
     })));
 
     setSBs(tempLetters.map((letter) => {
@@ -181,9 +185,11 @@ function App() {
   function clickedSB(e, i) {
     let sbCopy = [...sideboxes];
     sbCopy[i].opened = true;
+    let copyopened = helpers.opened;
+    copyopened.val++
     setHelp(p => ({
       ...p,
-      opened: p.opened + 1
+      opened: copyopened
     }))
     setSelected(e.target.id)
     setSBs(sbCopy);
@@ -316,9 +322,11 @@ function App() {
     setSBs(sbs)
 
     if (wrong > 0) {
+      let copychecks = helpers.checks;
+      copychecks.val++;
       setHelp(p => ({
         ...p,
-        checks: p.checks + 1
+        checks: copychecks
       }))
     }
 
@@ -329,10 +337,11 @@ function App() {
   
   function getScore() {
     let score = 100;
-    score -= Math.floor(helpers.reveals * (100/letterboxes.length));
-    score -= Math.floor(helpers.sideReveals * (10/letterboxes.length));
-    score -= Math.floor(helpers.opened * (10/letterboxes.length));
-    score -= Math.floor(helpers.checks * 3);
+    score -= Math.floor(helpers.reveals.val * (100/letterboxes.length));
+    score -= Math.floor(helpers.sideReveals.val * (10/letterboxes.length));
+    score -= Math.floor(helpers.opened.val * (10/letterboxes.length));
+    score -= Math.floor(helpers.checks.val * 3);
+    score -= Math.floor(helpers.hintUsed.val * 10);
     
     if (score < 0) score = 0;
     
@@ -350,6 +359,9 @@ function App() {
     }
     
     if (!focused) return;
+
+    let copyreveals = helpers.reveals;
+    let copysides = helpers.sideReveals;
     
     if (isSB) {
       let sbs = [...sideboxes];
@@ -357,18 +369,21 @@ function App() {
       sbs[row].letters.find(sb => sb === focused).confirmed = true;
       setSBs([...sbs]);
       pressedKeyLB({key: 'pushSB', target: focused})
+      copysides.val++;
     } else {
       let lbs = [...letterboxes];
       lbs.find(lb => lb === focused).inp = focused.char;
       lbs.find(lb => lb === focused).confirmed = true;
       setLBs([...lbs]);
       pressedKeyLB({key: 'push'})
+      copyreveals.val++;
     }
     $('#' + selected)[0].value = focused.char;
     
     setHelp(p => ({
       ...p,
-      reveals: p.reveals + 1
+      reveals: copyreveals,
+      sideReveals: copysides
     }))
   }
   
@@ -416,6 +431,15 @@ function App() {
   function lessHelp() {
     $('.pages').css('left', '-0%')
   }
+
+  function giveHint() {
+    let copyhint = helpers.hintUsed;
+    copyhint.val++;
+    setHelp(p => ({
+      ...p,
+      hintUsed: copyhint
+    }))
+  }
   
   return (
     <div className="bodyCont">
@@ -426,6 +450,9 @@ function App() {
         <ul> 
           <li onClick={openHelp}>
             Help
+          </li>
+          <li onClick={changeMode}>
+            <Button key={uuidv4()} text={modes[+ darkMode]} imgs={[]} />
           </li>
         </ul>
       </div>
@@ -452,12 +479,12 @@ function App() {
         </div>
 
         <div className="clueBox">
-          <Clue key={uuidv4()} clue={cluesState} sbs={sideboxes} reveal={openClue}/>
+          <Clue key={uuidv4()} clue={cluesState} sbs={sideboxes} reveal={openClue} hinted={helpers.hintUsed} />
         </div>
 
         <div className="footer">
           <div className="buttonsBar">
-            <Button key={uuidv4()} mode={darkMode} text={modes[+ darkMode]} imgs={[modeButtonLight, modeButtonDark]} func={changeMode}/>
+            <Button key={uuidv4()} mode={darkMode} text='Hint' imgs={[hintLight, hintDark]} func={giveHint}/>
             <Button key={uuidv4()} mode={darkMode} text='Reveal' imgs={[revealButtonLight, revealButtonDark]} func={revealOne}/>
             <Button key={uuidv4()} mode={darkMode} text='Check' imgs={[checkButtonLight, checkButtonDark]} func={checkAnswer}/>
           </div>
@@ -490,6 +517,9 @@ function App() {
                   </li>
                   <li>
                     Revealing across-clue letters will also effect your score, but slightly less so.
+                  </li>
+                  <li>
+                    Using the hint button will underline which part of clue defines the answer. This will mildly affect your score.
                   </li>
                   <li>
                     Finally, for each letter in the down clue, you have the option to open an across clue to help out. This will slightly reduce your score, but this feature is the essence of cryptickle so open those across clues with pride.
