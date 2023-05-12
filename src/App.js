@@ -61,7 +61,7 @@ function App() {
   function resize() {
     console.log(window.innerHeight, window.screen.availHeight);
     $('.bodyCont').css('height', window.innerHeight + 'px');
-    $('.mainContainer').css('height', window.innerHeight + 'px');
+    // $('.mainContainer').css('height', window.innerHeight + 'px');
   }
   
   window.addEventListener('resize', resize);
@@ -421,14 +421,14 @@ function App() {
     <div className="bodyCont">
       <div className="menuButton" onClick={openMenu}>
           ☰
-        </div>
-        <div className="dropDown">
-          <ul> 
-            <li onClick={openHelp}>
-              Help
-            </li>
-          </ul>
-        </div>
+      </div>
+      <div className="dropDown">
+        <ul> 
+          <li onClick={openHelp}>
+            Help
+          </li>
+        </ul>
+      </div>
 
       <div className="mainContainer">
         <div className="title">
