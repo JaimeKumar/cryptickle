@@ -199,7 +199,7 @@ function App() {
   function openClue() {
     let x = sideboxes.indexOf(sideboxes.find(sb => sb.selected))
     if (x < 0) return;
-    clickedSB(x)
+    clickedSB({target: {id: sideboxes.find(sb => sb.selected).id}}, x)
   }
 
   function moveCursor(val) {
@@ -353,11 +353,11 @@ function App() {
     let isSB = false;
     let focused = letterboxes.find(lb => lb.id === selected);
     let row = sideboxes.indexOf(sideboxes.find(lb => lb.selected));
-    if (letterboxes.indexOf(focused) < 0) {
+    if (row < 0) return;
+    if (!focused) {
       focused = sideboxes[row].letters.find(sb => sb.id===selected);
       isSB = true;
     }
-    
     if (!focused) return;
 
     let copyreveals = helpers.reveals;
@@ -499,69 +499,64 @@ function App() {
           <div className="helpContainer">
             <div className="pages">
               <div className="page" id='pg1'>
-            <div className="helpButton">
-                <div className="close" onClick={closeHelp}>
+                <div className="close" style={{top: '15px', right: '20px'}} onClick={closeHelp}>
                   ✖
                 </div>
-              </div>
-              <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>How to play:</p>
-              <small>
-                Cryptickle is just a tickle of a cryptic crossword. More help on how to solve cryptic clues can be found on the next page.
-                The aim of cryptickle is to solve the down clue, ideally with as little help as possible. </small>
-                <ul>
-                  <li>
-                    Each time you check your answer, your score will be slightly reduced, mostly to stop you from trying every letter in the alphabet for each box.
-                  </li>
-                  <li>
-                    Revealing a letter will significantly reduce your score. To be precise, each reveal used on the main (down) clue will reduce your score by its share of the answer length, so if you reveal every box you will get 0.
-                  </li>
-                  <li>
-                    Revealing across-clue letters will also effect your score, but slightly less so.
-                  </li>
-                  <li>
-                    Using the hint button will underline which part of clue defines the answer. This will mildly affect your score.
-                  </li>
-                  <li>
-                    Finally, for each letter in the down clue, you have the option to open an across clue to help out. This will slightly reduce your score, but this feature is the essence of cryptickle so open those across clues with pride.
-                    You can open an across clue by either clicking the greyed-out boxes as shown below, or by clicking the underlined text that reads 'Reveal Across Clue' in the clue section below the crossword.
-                    Bare in mind, the letter you want an across clue for must be selected to have these options.
-                  </li>
-                </ul>
+                <div className="pageInner">
+                <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>How to play:</p>
+                  <small>
+                    Cryptickle is just a tickle of a cryptic crossword. More help on how to solve cryptic clues can be found on the next page.
+                    The aim of cryptickle is to solve the down clue, ideally with as little help as possible. 
+                  </small>
+                  <ul>
+                    <li>
+                      Each time you check your answer, your score will be slightly reduced, mostly to stop you from trying every letter in the alphabet for each box.
+                    </li>
+                    <li>
+                      Revealing a letter will significantly reduce your score. To be precise, each reveal used on the main (down) clue will reduce your score by its share of the answer length, so if you reveal every box you will get 0.
+                    </li>
+                    <li>
+                      Revealing across-clue letters will also effect your score, but slightly less so.
+                    </li>
+                    <li>
+                      Using the hint button will underline which part of clue defines the answer. This will mildly affect your score.
+                    </li>
+                    <li>
+                      Finally, for each letter in the down clue, you have the option to open an across clue to help out. This will slightly reduce your score, but this feature is the essence of cryptickle so open those across clues with pride.
+                      You can open an across clue by either clicking the greyed-out boxes as shown below, or by clicking the underlined text that reads 'Reveal Across Clue' in the clue section.
+                    </li>
+                  </ul>
                   <img src={helpIMG1} alt='help information diagram'/>
-              <div className="helpButton" style={{height: '25px'}} >
-                <div className="close" style={{fontSize: '1.4em'}} onClick={moreHelp}>
+                </div>
+                <div className="close" style={{bottom: '10px', fontSize: '1.5em', right: '15px'}} onClick={moreHelp}>
                   ➔
                 </div>
               </div>
-            </div>
 
-            <div className="page" id='pg2'>
-              <div className="helpButton">
-                <div className="close" onClick={closeHelp}>
+              <div className="page" id='pg2'>
+                <div className="close" style={{top: '15px', right: '20px'}} onClick={closeHelp}>
                   ✖
                 </div>
-              </div>
-              <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Cryptic clues:</p>
-              <small>Clues will always start or end with a synonym of the answer's definition. 
-                Some words can also provide an indication of how you should solve the puzzle.</small>
-              <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Anagram indicators:</p>
-              <small>Words like <i>shuffled, mixed, confused, broken, drunk, smashed & upset</i> can all indicate you should find an anagram.</small>
-              <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Homophone indicators:</p>
-              <small>Phrases like <i>sounds like, I hear, I say, outspoken & reportedly</i> can all indicate the use of a homophone.</small>
-              <small style={{fontSize: '0.65em'}}>e.g - 'I hear a big cat isn't telling the truth' - sounds like Lion... LYING</small>
-              <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Reversal indicators:</p>
-              <small>These words suggest you should reverse a word or some letters: <i>reflected, flipped over, come back, knocked over & around.</i></small>
-              <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Hidden word indicators:</p>
-              <small>Phrases like <i>buried in, surrounded by, part of & a bit of</i> can indicate a word is hidden within another</small>
-              <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Deletion indicators:</p>
-              <small>Some words indicate you should remove some letters from a word, such as <i>excluding, without, dropped & cut</i>. Other words can refer to letter positions such as <i>opener, head, tail, end, half & center</i>, which can indicate you should build a word out of letters from other words.</small>
-              <div className="helpButton" style={{height: '25px', justifyContent: 'left'}} >
-                <div className="close" style={{fontSize: '1.4em', transform: 'rotate(180deg'}} onClick={lessHelp}>
+                <div className="pageInner">
+                    <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Cryptic clues:</p>
+                  <small>Clues will always start or end with a synonym of the answer's definition. 
+                    Some words can also provide an indication of how you should solve the puzzle.</small>
+                  <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Anagram indicators:</p>
+                  <small>Words like <i>shuffled, mixed, confused, broken, drunk, smashed & upset</i> can all indicate you should find an anagram.</small>
+                  <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Homophone indicators:</p>
+                  <small>Phrases like <i>sounds like, I hear, I say, outspoken & reportedly</i> can all indicate the use of a homophone.</small>
+                  <small style={{fontSize: '0.65em'}}>e.g - 'I hear a big cat isn't telling the truth' - sounds like Lion... LYING</small>
+                  <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Reversal indicators:</p>
+                  <small>These words suggest you should reverse a word or some letters: <i>reflected, flipped over, come back, knocked over & around.</i></small>
+                  <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Hidden word indicators:</p>
+                  <small>Phrases like <i>buried in, surrounded by, part of & a bit of</i> can indicate a word is hidden within another</small>
+                  <p style={{fontFamily: 'Roboto', fontWeight: 'bold'}}>Deletion indicators:</p>
+                  <small>Some words indicate you should remove some letters from a word, such as <i>excluding, without, dropped & cut</i>. Other words can refer to letter positions such as <i>opener, head, tail, end, half & center</i>, which can indicate you should build a word out of letters from other words.</small>
+                </div>
+                <div className="close" style={{fontSize: '1.5em', transform: 'rotate(180deg', bottom: '10px', left: '15px'}} onClick={lessHelp}>
                   ➔
                 </div>
               </div>
-            </div>
-            
             </div>
           </div>
 
