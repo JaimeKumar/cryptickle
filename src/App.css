@@ -18,16 +18,7 @@
 .bodyCont {
   overflow: hidden;
   height: 100%;
-}
-
-.rectangle {
-  background-color: red;
-  position: absolute;
-  top: 0;
-  left: 150px;
-  width: 30px;
-  height: 669px;
-  z-index: 100;
+  position: relative;
 }
 
 .mainContainer {
@@ -273,17 +264,21 @@
 }
 
 .overBox {
-  width: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
   height: 100%;
+  width: 100%;
+  /* height: -webkit-fill-available; */
+  position: absolute;
   background-color: #000000cc;
   z-index: 9;
-  position: absolute;
   top: 0;
   left: 0;
 }
 
 .scoreContainer {
-  position: absolute;
+  /* position: absolute; */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -334,22 +329,14 @@ h3 {
   font-size: 13px;
 }
 
-.overBox {
-  display: none;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  height: -webkit-fill-available;
-  position: absolute;
-}
-
 .helpContainer {
   position: relative;
   /* top: 50%; */
   /* left: 50%;/ */
   /* transform: translate(-50%, -50%); */
   height: 90%;
-  width: 90%; 
+  width: 90%;
+  max-width: 600px;
   /* aspect-ratio: 3/5; */
   background-color: var(--bkg);
   z-index: 10;
@@ -360,7 +347,7 @@ h3 {
 .pages {
   display: flex;
   flex-direction: row;
-  height: 90%;
+  height: 100%;
   width: 201%;
   justify-content: space-between;
   position: absolute;
