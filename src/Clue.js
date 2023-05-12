@@ -7,6 +7,7 @@ export default function Clue({ clue, reveal, sbs, hinted }) {
 
   if (hinted.val > 0) {
     let def = clue.down.definition;
+    if (def.includes('/')) def = def.splice(0, def.indexOf('/'));
     let pos = inner.indexOf(def);
     downClue = [inner.slice(0, pos), def, inner.slice(pos + def.length)]
   }
