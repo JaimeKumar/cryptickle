@@ -40,7 +40,6 @@ function App() {
 
   useEffect(() => {
     getMain();
-    // resize();
   }, [])
 
   useEffect(() => {
@@ -62,12 +61,6 @@ function App() {
       r.css('--fg2', '#c0c0c0');
     }
   }, [darkMode])
-
-  function resize() {
-    $('.bodyCont').css('height', window.innerHeight + 'px');
-  }
-  
-  window.addEventListener('resize', resize);
   
   function getMain() {
     let tempClue = cluesArr[Math.floor(Math.random() * cluesArr.length)];
