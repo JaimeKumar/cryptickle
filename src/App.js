@@ -40,7 +40,7 @@ function App() {
 
   useEffect(() => {
     getMain();
-    resize();
+    // resize();
   }, [])
 
   useEffect(() => {
