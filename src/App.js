@@ -34,7 +34,7 @@ function App() {
     hintUsed: {title: 'Hint Used', val: 0, mul: 10, div: false}
   });
   const [selected, setSelected] = useState();
-  const [score, setScore] = useState(100);
+  const [score, setScore] = useState(null);
   const [darkMode, setMode] = useState(false);
   const modes = ['Dark Mode', 'Light Mode'];
 
@@ -282,6 +282,7 @@ function App() {
   }
 
   function checkAnswer() {
+    console.log(score)
     let correct = 0;
     let wrong = 0;
     
@@ -329,16 +330,17 @@ function App() {
   }
   
   function getScore() {
-    let score = 100;
-    score -= Math.floor(helpers.reveals.val * (100/letterboxes.length));
-    score -= Math.floor(helpers.sideReveals.val * (10/letterboxes.length));
-    score -= Math.floor(helpers.opened.val * (10/letterboxes.length));
-    score -= Math.floor(helpers.checks.val * 3);
-    score -= Math.floor(helpers.hintUsed.val * 10);
+    if (score) return;
+    let tScore = 100;
+    tScore -= Math.floor(helpers.reveals.val * (100/letterboxes.length));
+    tScore -= Math.floor(helpers.sideReveals.val * (10/letterboxes.length));
+    tScore -= Math.floor(helpers.opened.val * (10/letterboxes.length));
+    tScore -= Math.floor(helpers.checks.val * 3);
+    tScore -= Math.floor(helpers.hintUsed.val * 10);
     
-    if (score < 0) score = 0;
+    if (tScore < 0) tScore = 0;
     
-    setScore(score);
+    setScore(tScore);
     $('#scoreBox').css('display', 'flex')
   }
   
